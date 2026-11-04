@@ -1,16 +1,53 @@
-* { box-sizing: border-box; }
-body { margin: 0; font-family: Arial, sans-serif; background: #f5f3ff; color: #2e1065; }
-.container { width: min(1100px, 92%); margin: 0 auto; }
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
-.navbar { background: #7c3aed; color: white; padding: 16px 0; }
-.navbar .container { display: flex; justify-content: space-between; align-items: center; }
+body {
+    background: #f7f8fa;
+}
 
-.hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; padding: 56px 0; }
-.hero img { width: 100%; border-radius: 18px; }
+.navbar-brand {
+    font-weight: 800;
+}
 
-.course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-bottom: 48px; }
-.card { background: white; padding: 20px; border-radius: 14px; border: 1px solid #e9d5ff; }
+/* Navbar purple */
+.navbar-kursusku {
+    background-color: #6b21a8 !important;
+}
 
-@media (max-width: 760px) {
-    .hero, .course-grid { grid-template-columns: 1fr; }
+.navbar-kursusku .nav-link {
+    color: #f3e8ff !important;
+}
+
+.navbar-kursusku .nav-link:hover {
+    color: #ffffff !important;
+}
+
+.navbar-kursusku .navbar-brand {
+    color: #ffffff !important;
+}
+
+.navbar-kursusku .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-kursusku .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Badge purple */
+.badge-kursusku {
+    background-color: #6b21a8 !important;
+    color: #ffffff !important;
+}
+
+/* Tombol purple */
+.btn-kursusku {
+    background-color: #6b21a8 !important;
+    border-color: #6b21a8 !important;
+    color: #ffffff !important;
+}
+
+.btn-kursusku:hover {
+    background-color: #581c87 !important;
+    border-color: #581c87 !important;
+    color: #ffffff !important;
 }
