@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -14,15 +13,16 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f4fa;
-            color: #302b45;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #faf5ff;
+            color: #292545;
         }
 
+        /* SIDEBAR UNGU CERAH */
         .sidebar {
             width: 245px;
             min-height: 100vh;
-            background: #30216b;
+            background: linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
             position: fixed;
             top: 0;
@@ -34,29 +34,38 @@
             font-size: 25px;
             font-weight: bold;
             margin-bottom: 45px;
+            color: white;
+        }
+
+        .brand span {
+            color: #f3e8ff;
         }
 
         .menu-title {
-            color: #bdb4e4;
-            font-size: 12px;
+            color: #f3e8ff;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
             margin: 25px 12px 12px;
             text-transform: uppercase;
         }
 
         .menu a {
             display: block;
-            color: #e8e3ff;
+            color: #f3e8ff;
             text-decoration: none;
-            padding: 13px 14px;
-            border-radius: 9px;
+            padding: 13px 15px;
+            border-radius: 10px;
             margin-bottom: 8px;
             font-size: 14px;
+            transition: all 0.2s ease;
         }
 
         .menu a:hover,
         .menu a.active {
-            background: #51418f;
+            background: #a78bfa;
             color: white;
+            transform: translateX(4px);
         }
 
         .main {
@@ -72,27 +81,30 @@
         }
 
         .topbar h1 {
-            font-size: 25px;
-            color: #30216b;
+            font-size: 27px;
+            color: #7c3aed;
+            margin-bottom: 7px;
         }
 
         .topbar p {
-            color: #88839a;
-            margin-top: 7px;
+            color: #85809c;
             font-size: 14px;
         }
 
         .admin {
             background: white;
-            padding: 10px 16px;
-            border-radius: 20px;
-            color: #51418f;
+            padding: 11px 17px;
+            border-radius: 12px;
+            color: #7c3aed;
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 600;
+            box-shadow: 0 3px 15px rgba(139, 92, 246, 0.1);
+            border: 1px solid #ede9fe;
         }
 
+        /* HERO SECTION */
         .hero {
-            background: linear-gradient(120deg, #30216b, #6551ad);
+            background: linear-gradient(120deg, #8b5cf6, #7c3aed);
             color: white;
             border-radius: 18px;
             padding: 55px 45px;
@@ -100,12 +112,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            box-shadow: 0 10px 25px rgba(48, 33, 107, 0.15);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
         }
 
         .hero-label {
             display: inline-block;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.2);
             padding: 8px 14px;
             border-radius: 20px;
             font-size: 12px;
@@ -121,7 +133,7 @@
         }
 
         .hero p {
-            color: #e6e0ff;
+            color: #f3e8ff;
             font-size: 15px;
             line-height: 1.7;
             max-width: 570px;
@@ -132,7 +144,7 @@
             display: inline-block;
             width: fit-content;
             background: white;
-            color: #403080;
+            color: #7c3aed;
             padding: 13px 23px;
             border-radius: 8px;
             font-size: 14px;
@@ -142,16 +154,17 @@
         }
 
         .btn:hover {
-            background: #eee9ff;
+            background: #f3e8ff;
             transform: translateY(-2px);
         }
 
+        /* INFO SECTION */
         .info-section {
             margin-top: 30px;
         }
 
         .info-section h3 {
-            color: #30216b;
+            color: #7c3aed;
             font-size: 20px;
             margin-bottom: 17px;
         }
@@ -166,7 +179,8 @@
             background: white;
             padding: 23px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(40, 25, 90, 0.04);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.08);
+            border: 1px solid #ede9fe;
         }
 
         .info-card .symbol {
@@ -175,13 +189,13 @@
         }
 
         .info-card h4 {
-            color: #403080;
+            color: #7c3aed;
             margin-bottom: 8px;
             font-size: 15px;
         }
 
         .info-card p {
-            color: #88839a;
+            color: #85809c;
             font-size: 13px;
             line-height: 1.6;
         }
@@ -226,15 +240,20 @@
 <body>
 
     <aside class="sidebar">
-        <div class="brand">KursusKu.</div>
+        <div class="brand">Kursus<span>Ku.</span></div>
 
-        <div class="menu-title">Menu Utama</div>
+        <div class="menu-title">MENU UTAMA</div>
 
         <nav class="menu">
-            <a href="{{ route('home') }}" class="active">▦ &nbsp; Dashboard</a>
+            <a href="{{ route('home') }}" class="active">⌂ &nbsp; Dashboard</a>
             <a href="{{ route('courses.index') }}">▤ &nbsp; Data Kursus</a>
             <a href="{{ route('enrollments.create') }}">＋ &nbsp; Pendaftaran</a>
-            <a href="{{ route('home') }}">⌂ &nbsp; Halaman Utama</a>
+        </nav>
+
+        <div class="menu-title">INFORMASI</div>
+
+        <nav class="menu">
+            <a href="{{ route('home') }}">ⓘ &nbsp; Halaman Utama</a>
         </nav>
     </aside>
 
