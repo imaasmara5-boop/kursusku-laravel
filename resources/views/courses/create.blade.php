@@ -1,87 +1,60 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Kursus | KursusKu')
+@section('title', 'Pendaftaran Kursus | KursusKu')
 
 @section('content')
 <div class="topbar">
     <div>
-        <h1>Tambah Kursus Baru</h1>
-        <p>Isi formulir di bawah untuk menambahkan program kursus.</p>
+        <h1>Formulir Pendaftaran</h1>
+        <p>Silakan lengkapi formulir di bawah ini untuk mendaftarkan peserta pada program kursus.</p>
     </div>
-    <div class="admin">Administrator</div>
 </div>
 
 <div class="form-card">
-    <form method="POST" action="{{ route('courses.store') }}">
+    <h2 style="color:#7c3aed; margin-bottom:8px; font-size:22px;">Daftarkan Peserta</h2>
+    <p style="color:#85809c; margin-bottom:25px; font-size:14px;">
+        Pilih peserta dan kursus yang ingin diikuti. Sistem akan menolak jika peserta sudah terdaftar pada kursus yang sama.
+    </p>
+
+    <!-- Perhatikan action-nya adalah enrollments.store, BUKAN courses.store -->
+    <form method="POST" action="{{ route('enrollments.store') }}">
         @csrf
 
+        <!-- Dropdown Peserta -->
         <div class="form-group">
-            <label for="code">Kode Kursus</label>
-            <input type="text" id="code" name="code" value="{{ old('code') }}" class="form-control @error('code') is-invalid @enderror">
-            @error('code')
+            <label for="participant_id">Pilih Peserta</label>
+            <select id="participant_id" name="participant_id" class="form-control @error('participant_id') is-invalid @enderror" required>
+                <option value="">-- Pilih Peserta --</option>
+                @foreach($participants as $participant)
+                    <option value="{{ $participant->id }}" {{ old('participant_id') == $participant->id ? 'selected' : '' }}>
+                        {{ $participant->name }} ({{ $participant->email }})
+                    </option>
+                @endforeach
+            </select>
+            @error('participant_id')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
+        <!-- Dropdown Kursus -->
         <div class="form-group">
-            <label for="name">Nama Kursus</label>
-            <input type="text" id="name" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
-            @error('name')
+            <label for="course_id">Pilih Kursus</label>
+            <select id="course_id" name="course_id" class="form-control @error('course_id') is-invalid @enderror" required>
+                <option value="">-- Pilih Kursus --</option>
+                @foreach($courses as $course)
+                    <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                        {{ $course->code }} - {{ $course->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('course_id')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="description">Deskripsi</label>
-            <textarea id="description" name="description" rows="4" class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
-            @error('description')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="fee">Biaya</label>
-                <input type="number" id="fee" name="fee" min="0" value="{{ old('fee') }}" class="form-control @error('fee') is-invalid @enderror">
-                @error('fee')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="quota">Kuota</label>
-                <input type="number" id="quota" name="quota" min="1" max="500" value="{{ old('quota') }}" class="form-control @error('quota') is-invalid @enderror">
-                @error('quota')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="start_date">Tanggal Mulai</label>
-                <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" class="form-control @error('start_date') is-invalid @enderror">
-                @error('start_date')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select id="status" name="status" class="form-control @error('status') is-invalid @enderror">
-                    <option value="draft" @selected(old('status') === 'draft')>Draft</option>
-                    <option value="open" @selected(old('status') === 'open')>Open</option>
-                    <option value="closed" @selected(old('status') === 'closed')>Closed</option>
-                </select>
-                @error('status')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
         </div>
 
         <div class="form-actions">
-            <a href="{{ route('courses.index') }}" class="btn btn-secondary">Batal</a>
-            <button type="submit" class="btn btn-primary">Simpan Kursus</button>
+            <a href="{{ route('courses.index') }}" class="btn btn-secondary">Kembali</a>
+            <button type="submit" class="btn btn-primary">Simpan Enrollment</button>
         </div>
     </form>
 </div>

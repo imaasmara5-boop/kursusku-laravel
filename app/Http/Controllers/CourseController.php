@@ -2,77 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCourseRequest;
+use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
-use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    // 1. Tampilkan daftar kursus
     public function index()
     {
         $courses = Course::latest()->get();
-
         return view('courses.index', compact('courses'));
     }
 
+    // 2. Tampilkan form tambah kursus
     public function create()
     {
         return view('courses.create');
     }
 
-    public function store(Request $request)
+    // 3. Simpan data baru (Sekarang dijaga oleh StoreCourseRequest)
+    public function store(StoreCourseRequest $request)
     {
-        $validated = $request->validate([
-            'code' => 'required|string|max:255|unique:courses,code',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'fee' => 'required|integer|min:0',
-            'quota' => 'required|integer|min:1',
-            'start_date' => 'required|date',
-            'status' => 'required|in:draft,open,closed',
-        ]);
+        // $request->validated() hanya mengambil data yang lolos aturan satpam
+        Course::create($request->validated());
 
-        Course::create($validated);
-
-        return redirect()
-            ->route('courses.index')
-            ->with('success', 'Kursus berhasil ditambahkan!');
+        return to_route('courses.index')
+            ->with('success', 'Kursus berhasil ditambahkan.');
     }
 
+    // 4. Tampilkan detail satu kursus
     public function show(Course $course)
     {
         return view('courses.show', compact('course'));
     }
 
+    // 5. Tampilkan form edit kursus
     public function edit(Course $course)
     {
         return view('courses.edit', compact('course'));
     }
 
-    public function update(Request $request, Course $course)
+    // 6. Simpan perubahan data (Dijaga oleh UpdateCourseRequest)
+    public function update(UpdateCourseRequest $request, Course $course)
     {
-        $validated = $request->validate([
-            'code' => 'required|string|max:255|unique:courses,code,' . $course->id,
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'fee' => 'required|integer|min:0',
-            'quota' => 'required|integer|min:1',
-            'start_date' => 'required|date',
-            'status' => 'required|in:draft,open,closed',
-        ]);
+        $course->update($request->validated());
 
-        $course->update($validated);
-
-        return redirect()
-            ->route('courses.index')
-            ->with('success', 'Kursus berhasil diperbarui!');
+        return to_route('courses.show', $course)
+            ->with('success', 'Kursus berhasil diperbarui.');
     }
 
+    // 7. Hapus data kursus
     public function destroy(Course $course)
     {
         $course->delete();
 
-        return redirect()
-            ->route('courses.index')
-            ->with('success', 'Kursus berhasil dihapus!');
+        return to_route('courses.index')
+            ->with('success', 'Kursus berhasil dihapus.');
     }
 }

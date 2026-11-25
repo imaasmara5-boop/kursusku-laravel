@@ -1,62 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Requests;
 
-use App\Http\Requests\StoreCourseRequest;
-use App\Http\Requests\UpdateCourseRequest;
-use App\Models\Course;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CourseController extends Controller
+class StoreCourseRequest extends FormRequest
 {
-    // 1. Tampilkan daftar kursus
-    public function index()
+    public function authorize(): bool
     {
-        $courses = Course::latest()->get();
-        return view('courses.index', compact('courses'));
+        return true; 
     }
 
-    // 2. Tampilkan form tambah kursus
-    public function create()
+    public function rules(): array
     {
-        return view('courses.create');
-    }
-
-    // 3. Simpan data baru (Pakai StoreCourseRequest)
-    public function store(StoreCourseRequest $request)
-    {
-        Course::create($request->validated());
-
-        return to_route('courses.index')
-            ->with('success', 'Kursus berhasil ditambahkan.');
-    }
-
-    // 4. Tampilkan detail satu kursus
-    public function show(Course $course)
-    {
-        return view('courses.show', compact('course'));
-    }
-
-    // 5. Tampilkan form edit kursus
-    public function edit(Course $course)
-    {
-        return view('courses.edit', compact('course'));
-    }
-
-    // 6. Simpan perubahan data (Pakai UpdateCourseRequest)
-    public function update(UpdateCourseRequest $request, Course $course)
-    {
-        $course->update($request->validated());
-
-        return to_route('courses.show', $course)
-            ->with('success', 'Kursus berhasil diperbarui.');
-    }
-
-    // 7. Hapus data kursus
-    public function destroy(Course $course)
-    {
-        $course->delete();
-
-        return to_route('courses.index')
-            ->with('success', 'Kursus berhasil dihapus.');
+        return [
+            'code'        => ['required', 'string', 'max:20', 'unique:courses,code'],
+            'name'        => ['required', 'string', 'min:3', 'max:120'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'fee'         => ['required', 'integer', 'min:0'],
+            'quota'       => ['required', 'integer', 'between:1,500'],
+            'start_date'  => ['required', 'date'],
+            'status'      => ['required', 'in:draft,open,closed'],
+        ];
     }
 }

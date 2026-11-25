@@ -1,0 +1,100 @@
+=========================================================
+AI LOG - PRAKTIKUM PERTEMUAN 11 (Laravel CRUD Lanjutan)
+=========================================================
+Nama    : Ima
+NIM     : ....................................
+Tanggal : 25 November 2026
+Mata Kuliah : Pemrograman Web III
+Proyek      : KursusKu (kursusku-laravel)
+AI yang Digunakan : Qwen3.7-Plus
+=========================================================
+
+TABEL LOG PROMPT & SARAN AI
+---------------------------------------------------------
+
+| No | Prompt / Pertanyaan | Saran AI | Dipakai? | Alasan |
+|----|---------------------|----------|----------|--------|
+| 1  | Error "Could not open input file: artisan" saat menjalankan php artisan route:list | Pindahkan posisi terminal ke folder proyek dengan perintah `cd kursusku-laravel` | Ya | File artisan berada di root folder proyek Laravel, bukan di C:\laragon\www\ |
+| 2  | Error "Access denied for user 'root'@'localhost' (using password: YES)" | Cek konfigurasi DB_PASSWORD pada file .env dan pastikan sesuai dengan password MySQL Laragon | Ya | Laravel gagal konek ke MySQL karena kredensial tidak cocok |
+| 3  | Error "Access denied for user 'root'@'localhost' (using password: NO)" saat login phpMyAdmin | Coba password "root" pada phpMyAdmin, lalu sinkronkan DB_PASSWORD di .env | Ya | MySQL Laragon membutuhkan password, bukan kosong |
+| 4  | Error "The term 'php' is not recognized" di terminal VS Code PowerShell | Gunakan Terminal bawaan Laragon, atau tambahkan path PHP ke $env:Path | Ya | PowerShell tidak mengenal perintah php karena PATH belum dikonfigurasi |
+| 5  | Halaman /courses tampil tapi sidebar ungu gelap, tidak konsisten dengan landing page | Ubah CSS di resources/views/courses/index.blade.php: ganti #30216b menjadi linear-gradient(180deg, #8b5cf6, #7c3aed) | Ya | Menyamakan tema warna ungu cerah sesuai preferensi mahasiswa |
+| 6  | Cara implementasi halaman detail (show) sesuai panduan Langkah 1 | Tambahkan method show(Course $course) di CourseController dengan route model binding, lalu return view('courses.show', compact('course')) | Ya | Sesuai panduan praktikum Pertemuan 11 Langkah 1 |
+| 7  | Cara membuat file show.blade.php dengan tema ungu | Buat file baru di resources/views/courses/show.blade.php dengan CSS inline tema ungu (#8b5cf6, #7c3aed, #faf5ff) | Ya | Menampilkan detail kursus dengan layout konsisten |
+| 8  | Cara membuat Form Request untuk validasi | Jalankan `php artisan make:request StoreCourseRequest` dan `php artisan make:request UpdateCourseRequest` | Ya | Memindahkan validasi dari controller ke Form Request sesuai Langkah 4 |
+| 9  | Error "Request already exists" saat menjalankan make:request | Tidak perlu membuat ulang, cukup buka file yang sudah ada di app/Http/Requests/ dan isi rules() | Ya | File sudah dibuat dari percobaan sebelumnya |
+| 10 | Cara mengisi rules() pada StoreCourseRequest | authorize() return true, rules() berisi code (unique), name (min:3), fee (min:0), quota (between:1,500), status (in:draft,open,closed) | Ya | Sesuai Langkah 5 panduan |
+| 11 | Cara mengisi rules() pada UpdateCourseRequest agar tidak error duplicate saat edit | Gunakan Rule::unique('courses','code')->ignore($course) dengan $course = $this->route('course') | Ya | Sesuai Langkah 6 panduan, agar record sendiri diabaikan saat cek unique |
+| 12 | Cara refactor CourseController agar pakai Form Request | Ubah signature store(StoreCourseRequest $request) dan update(UpdateCourseRequest $request, Course $course), lalu pakai $request->validated() | Ya | Sesuai Langkah 7 panduan |
+| 13 | Cara membuat halaman edit dengan tema ungu | Buat resources/views/courses/edit.blade.php dengan pola old('field', $course->field) dan @error('field') untuk feedback per field | Ya | Sesuai Langkah 8 panduan, menjaga input user saat validasi gagal |
+| 14 | Error "localhost refused to connect" | Jalankan kembali `php artisan serve` di Terminal Laragon | Ya | Server development Laravel berhenti berjalan |
+| 15 | Cara mengisi Test Matrix minimal 12 kasus | Gunakan template tabel 6 kolom (No, Kasus, Input, Expected, Actual, Status, Bukti) dengan urutan uji aman: 0 → 1 → 500 → 501 → delete paling akhir | Ya | Sesuai Langkah 16-18 panduan |
+| 16 | Cara membuat file ai-log.txt | Buat di folder evidence/week-11/, isi dengan tabel log prompt, saran AI, dipakai?, dan alasan | Ya | Sesuai Langkah 20 panduan (Vibe Coding) |
+
+=========================================================
+KONSEP YANG DIPAHAMI SETELAH MENGGUNAKAN AI
+=========================================================
+
+1. Route Model Binding
+   Laravel otomatis mencari model Course berdasarkan ID di URL
+   (misal /courses/5 → $course = Course::find(5)) dan
+   menyuntikkannya ke parameter method controller.
+
+2. Form Request sebagai "Satpam"
+   StoreCourseRequest dan UpdateCourseRequest adalah tempat
+   khusus untuk authorization dan validation rules.
+   Controller menjadi bersih karena tidak lagi berisi
+   aturan validasi.
+
+3. validated()
+   Mengambil hanya data yang lolos rules dari Form Request,
+   lebih aman daripada $request->all().
+
+4. Rule::unique()->ignore($course)
+   Saat update, code milik record yang sedang diedit harus
+   diabaikan agar tidak dianggap duplicate. Tanpa ignore(),
+   edit tanpa mengubah code akan gagal dengan error
+   "The code has already been taken".
+
+5. old('field', $currentValue)
+   Menjaga input terakhir user saat validasi gagal,
+   agar user tidak perlu mengetik ulang seluruh form.
+
+6. @method('PUT') dan @method('DELETE')
+   Method spoofing karena HTML form hanya mendukung GET
+   dan POST. Laravel menerjemahkan @method('PUT') menjadi
+   route PUT courses/{course} dan @method('DELETE') menjadi
+   route DELETE courses/{course}.
+
+7. @csrf
+   Token CSRF wajib ada di setiap form POST/PUT/DELETE
+   untuk mencegah cross-site request forgery.
+
+8. Feedback error dekat field
+   Pola @error('field') <div class="error-message">
+   {{ $message }}</div> @enderror ditempatkan tepat
+   setelah input, bukan hanya di atas form.
+
+=========================================================
+HASIL PENGUJIAN (SUMMARY)
+=========================================================
+
+- Checkpoint 0 : PASS (halaman /courses tampil dengan data)
+- Checkpoint 1 : PASS (halaman detail /courses/5 tampil)
+- Checkpoint 2 : PASS (halaman edit terisi data database,
+                  update tanpa ubah code berhasil)
+- Test Matrix  : 12 kasus sudah diuji dan dicatat
+- Screenshot   : tersimpan di evidence/week-11/
+
+=========================================================
+REFLEKSI PRIBADI
+=========================================================
+
+AI digunakan sebagai pair programmer untuk debugging error
+koneksi database, konfigurasi terminal, dan pembuatan
+template Blade dengan tema ungu. Seluruh konsep Laravel
+(route model binding, Form Request, validated(), ignore(),
+method spoofing) sudah saya pahami dan dapat saya jelaskan
+kembali tanpa melihat AI, sesuai aturan kelas Vibe Coding.
+
+=========================================================
