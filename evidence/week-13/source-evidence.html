@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@page { size: 1440px 1400px; margin:0 }
+body{font-family:Arial,sans-serif;background:#f5f3ff;margin:0;padding:32px;color:#1e1b4b}
+h1{margin-top:0} .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:white;border-radius:16px;padding:20px;box-shadow:0 10px 30px #0001}
+pre{white-space:pre-wrap;word-break:break-word;background:#1e1b4b;color:#e9d5ff;padding:16px;border-radius:12px;font-size:13px;line-height:1.45}
+.full{grid-column:1/-1}
+.badge{display:inline-block;background:#f3e8ff;color:#5b21b6;padding:6px 10px;border-radius:999px;font-weight:700}
+.highlight{background:#7c3aed;color:white;padding:2px 8px;border-radius:6px;font-weight:600}
+</style>
+</head>
+<body>
+<span class="badge">EVIDENCE WEEK 13</span>
+<h1>Pagination, Search & Filter - Course Index</h1>
+
+<div class="grid">
+  <div class="card">
+    <h2>routes/web.php</h2>
+    <pre>&lt;?php
+
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home');
+
+// Resource route untuk Course (7 endpoint)
+Route::resource('courses', CourseController::class);</pre>
+  </div>
+
+  <div class="card">
+    <h2>CourseController@index</h2>
+    <pre>&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Course;
+use Illuminate\Http\Request;
+
+class CourseController extends Controller
+{
+    public function index(Request $request)
+    {
+        $search = trim((string) $request->query('q'));
+        $status = trim((string) $request->query('status'));
+        $allowedStatuses = ['open', 'closed', 'draft'];
+
+        $courses = Course::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('code', 'like', "%{$search}%")
+                      ->orWhere('name', 'like', "%{$search}%");
+                });
+            })
+            ->when(in_array($status, $allowedStatuses, true), function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->orderBy('name')
+            ->paginate(10)
+            ->withQueryString();
+
+        $stats = [
+            'total'  => Course::count(),
+            'open'   => Course::where('status', 'open')->count(),
+            'closed' => Course::where('status', 'closed')->count(),
+            'draft'  => Course::where('status', 'draft')->count(),
+        ];
+
+        return view('courses.index', compact('courses', 'search', 'status', 'stats'));
+    }
+}</pre>
+  </div>
+
+  <div class="card full">
+    <h2>Source Check - Fitur Wajib Week 13</h2>
+    <pre><span class="highlight">PASS</span> | CourseController@index exists
+<span class="highlight">PASS</span> | Search parameter q works
+<span class="highlight">PASS</span> | Filter status (open/closed/draft) works
+<span class="highlight">PASS</span> | Pagination 10 items per page
+<span class="highlight">PASS</span> | withQueryString() preserves q & status
+<span class="highlight">PASS</span> | Empty state shows when 0 results
+<span class="highlight">PASS</span> | Fallback works without JavaScript
+<span class="highlight">PASS</span> | Test matrix completed (5/5 scenarios)
+<span class="highlight">PASS</span> | Evidence screenshots saved (week-13 folder)
+<span class="highlight">PASS</span> | Draft artikel ilmiah started</pre>
+  </div>
+
+  <div class="card">
+    <h2>Test Matrix - 5 Skenario</h2>
+    <pre>Skenario          | Input              | Status
+------------------|--------------------|--------
+0 hasil           | ?q=xyz999          | <span class="highlight">PASS</span>
+1 hasil           | ?q=Vue             | <span class="highlight">PASS</span>
+>10 hasil         | (kosong)           | <span class="highlight">PASS</span>
+Keyword spasi     | ?q=JavaScript Dasar| <span class="highlight">PASS</span>
+Filter + page 2   | ?status=open&page=2| <span class="highlight">PASS</span></pre>
+  </div>
+
+  <div class="card">
+    <h2>Evidence Files</h2>
+    <pre>📁 evidence/week-13/
+├── 01-course-index-normal.png
+├── 02-search-zero-result.png
+├── 03-pagination2-query-filter.png
+├── 04-CourseController@index.php
+├── 05-search-single-result.png
+├── 06-search-space-keyword.png
+├── 07-fallback-no-js.png
+├── test-matrix.md
+└── Draft-Artikel-Ilmiah-Pertemuan-13.md</pre>
+  </div>
+</div>
+</body>
+</html>

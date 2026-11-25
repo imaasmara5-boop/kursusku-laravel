@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@page { size: 1440px 1000px; margin:0 }
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f3ff; /* Latar belakang ungu sangat muda */
+  margin: 0;
+  padding: 40px;
+  color: #1e1b4b; /* Teks ungu tua */
+}
+.card {
+  max-width: 980px;
+  margin: auto;
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 15px 35px rgba(107, 33, 168, 0.1); /* Bayangan ungu halus */
+}
+pre {
+  background: #2e1065; /* Latar blok kode ungu gelap */
+  color: #e9d5ff; /* Teks kode ungu muda */
+  padding: 18px;
+  border-radius: 12px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.badge {
+  display: inline-block;
+  background: #f3e8ff;
+  color: #6b21a8;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+.pass {
+  color: #4ade80; /* Hijau terang agar kontras dan mudah dibaca di latar gelap */
+  font-weight: bold;
+}
+h1 {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  color: #4c1d95;
+  font-size: 24px;
+}
+p {
+  line-height: 1.6;
+  color: #4b5563;
+}
+code {
+  background: #f3e8ff;
+  color: #6b21a8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <span class="badge">EVIDENCE WEEK 13</span>
+  <h1>Source-Level Verification: Course Index</h1>
+  
+  <p>Proyek <strong>KursusKu</strong> telah diperbarui untuk Pertemuan 13. Fitur data discovery (Search, Filter, Pagination) telah diimplementasikan pada <code>CourseController</code> dan view <code>courses.index</code> dengan tema ungu. Source check berikut memverifikasi struktur kode sebelum pengujian 5 skenario wajib:</p>
+  
+  <pre><span class="pass">PASS</span> | routes/web.php memiliki Route::resource('courses', ...)
+<span class="pass">PASS</span> | CourseController@index menerima Illuminate\Http\Request
+<span class="pass">PASS</span> | Query builder menggunakan when() untuk search parameter 'q'
+<span class="pass">PASS</span> | Query builder memvalidasi filter 'status' (open/closed/draft)
+<span class="pass">PASS</span> | Pagination diatur paginate(10)->withQueryString()
+<span class="pass">PASS</span> | courses/index.blade.php menggunakan @forelse untuk empty state
+<span class="pass">PASS</span> | Form search menggunakan method="GET" (progressive enhancement)
+<span class="pass">PASS</span> | CSS kustom tema ungu diterapkan pada form dan pagination
+<span class="pass">PASS</span> | Database memiliki minimal 21 course dummy dengan variasi status</pre>
+
+  <p>Setelah verifikasi source, jalankan <strong>5 skenario pengujian wajib</strong> (0 hasil, 1 hasil, >10 hasil, keyword spasi, filter + page 2) dan bekukan screenshot ke folder <code>evidence/week-13/</code> untuk penyusunan draft artikel ilmiah sesuai panduan halaman 18.</p>
+</div>
+
+</body>
+</html>
