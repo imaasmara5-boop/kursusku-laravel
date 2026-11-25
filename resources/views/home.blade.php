@@ -28,6 +28,8 @@
             top: 0;
             left: 0;
             padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .brand {
@@ -68,6 +70,27 @@
             transform: translateX(4px);
         }
 
+        /* Gaya tombol Login di paling bawah */
+        .menu-login {
+            margin-top: auto; 
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+        }
+        
+        .menu-login a {
+            background: white;
+            color: #7c3aed;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .menu-login a:hover {
+            background: #f3e8ff;
+            color: #6d28d9;
+            transform: translateY(-2px);
+        }
+
         .main {
             margin-left: 245px;
             padding: 35px;
@@ -91,15 +114,44 @@
             font-size: 14px;
         }
 
-        .admin {
+        /* Bagian Profil User di Kanan Atas */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             background: white;
-            padding: 11px 17px;
-            border-radius: 12px;
-            color: #7c3aed;
-            font-size: 13px;
-            font-weight: 600;
+            padding: 8px 17px 8px 8px;
+            border-radius: 30px;
             box-shadow: 0 3px 15px rgba(139, 92, 246, 0.1);
             border: 1px solid #ede9fe;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: #8b5cf6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-info strong {
+            font-size: 13px;
+            color: #292545;
+        }
+
+        .user-info span {
+            font-size: 11px;
+            color: #85809c;
         }
 
         /* HERO SECTION */
@@ -239,24 +291,36 @@
 
 <body>
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="brand">Kursus<span>Ku.</span></div>
 
         <div class="menu-title">MENU UTAMA</div>
-
         <nav class="menu">
-            <a href="{{ route('home') }}" class="active">⌂ &nbsp; Dashboard</a>
-            <a href="{{ route('courses.index') }}">▤ &nbsp; Data Kursus</a>
-            <a href="{{ route('enrollments.create') }}">＋ &nbsp; Pendaftaran</a>
+            <!-- Menggunakan url() agar lebih aman -->
+            <a href="/" class="active">⌂ &nbsp; Dashboard</a>
+            <a href="#">▤ &nbsp; Data Kursus</a>
+            <a href="#">＋ &nbsp; Pendaftaran</a>
         </nav>
 
         <div class="menu-title">INFORMASI</div>
-
         <nav class="menu">
-            <a href="{{ route('home') }}">ⓘ &nbsp; Halaman Utama</a>
+            <!-- MENU BERANDA -->
+            <a href="/">ⓘ &nbsp; Beranda</a>
+            
+            <!-- INI DIA MENU PROFIL SAYA YANG BARU DITAMBAHKAN -->
+            <a href="/profile">👤 &nbsp; Profil Saya</a>
         </nav>
+
+        <!-- TOMBOL LOGIN DI PALING BAWAH -->
+        <div class="menu-login">
+            <nav class="menu">
+                <a href="/login">🔑 &nbsp; Login</a>
+            </nav>
+        </div>
     </aside>
 
+    <!-- KONTEN UTAMA -->
     <main class="main">
 
         <header class="topbar">
@@ -265,7 +329,14 @@
                 <p>Kursus teknologi untuk mahasiswa</p>
             </div>
 
-            <div class="admin">Administrator</div>
+            <!-- BAGIAN PROFIL USER -->
+            <div class="user-profile">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <strong>Administrator</strong>
+                    <span>admin@kursusku.com</span>
+                </div>
+            </div>
         </header>
 
         <section class="hero">
@@ -279,7 +350,7 @@
                 Pilih kursus, cek ketersediaan kursi, lalu isi formulir pendaftaran.
             </p>
 
-            <a href="{{ route('enrollments.create') }}" class="btn">
+            <a href="#" class="btn">
                 Daftar Kursus &nbsp; →
             </a>
         </section>
